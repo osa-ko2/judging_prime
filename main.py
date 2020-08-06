@@ -1,4 +1,5 @@
 from flask import Flask, request, abort
+from math import sqrt
 import os
 
 from linebot import (
@@ -19,6 +20,23 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+
+
+def prime(arg):
+    try:
+        arg = int(arg)
+    except ValueError:
+        return False
+    if isinstance(arg,int) and 0 < arg < 10000000:
+        sqrt_arg = int(sqrt(arg))
+        for i in range(2, sqrt_arg+1):
+            if arg % i == 0:
+                return False
+            else:
+                pass
+        return True
+    else:
+        return False 
 
 @app.route("/")
 def hello_world():
@@ -43,9 +61,12 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    received_massage = event.massage.text
+    sending_massage = str(prime(received_massage))
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text=sending_massage)
+    )
 
 if __name__ == "__main__":
 #    app.run()
