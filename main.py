@@ -61,11 +61,11 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    received_massage = event.massage.text
-    sending_massage = str(prime(received_massage))
+    received_message = event.message.text
+    sending_message = str(prime(received_message))
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=sending_massage)
+        TextSendMessage(text=sending_message)
     )
 
 if __name__ == "__main__":
